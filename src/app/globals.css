@@ -1,0 +1,193 @@
+@import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Gothic+A1&display=swap");
+
+body {
+  font-family: "Gothic A1", sans-serif;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.filter-sidebar {
+  background-color: #f7f7f7;
+}
+
+:root {
+  /* Light mode defaults */
+  --background-color: #ffffff;
+  --text-color: #000000;
+  --card-background: #ffffff;
+  --border-color: #e5e7eb;
+  --price-color: #1f2937;
+  --discount-color: #10b981;
+  --filter-background: #f9fafb;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.filter-sidebar {
+  background-color: var(--filter-background);
+  border-color: var(--border-color);
+}
+
+.product-card {
+  background-color: var(--card-background);
+}
+
+.price {
+  color: var(--price-color);
+}
+
+.discount {
+  color: var(--discount-color);
+}
+
+.scrollbar-thin {
+  scrollbar-width: none;
+}
+.swiper-slide-active .swiper-slide-inner {
+  width: 80% !important; /* Ensure active slide width is reduced */
+  margin: 0 auto; /* Center the reduced-width slide */
+}
+
+.swiper-slide .swiper-slide-inner {
+  width: 100%; /* Default width for inactive slides */
+  transition: width 0.3s ease; /* Smooth transition for width change */
+}
+.react-tel-input .country-list {
+  width: 100% !important;
+  max-width: none !important;
+  border-radius: 0.5rem !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid #f97316 !important;
+  background: white !important;
+  padding: 0.5rem 0 !important;
+  position: relative !important;
+  margin: 0 !important;
+  margin-block: 10px !important;
+}
+
+.react-tel-input input.form-control {
+  padding-left: 48px !important; /* keeps +91 visible */
+  left: 0% !important;
+}
+
+.react-tel-input .country-list .country {
+  padding: 0.5rem 1rem !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  cursor: pointer !important;
+  transition: background 0.2s !important;
+}
+
+.react-tel-input .country-list .country:hover {
+  background-color: #fff9f6 !important;
+}
+
+.react-tel-input .country-list .country .country-name {
+  text-align: left !important;
+  flex-grow: 1 !important;
+  font-size: 0.875rem !important;
+  color: #333 !important;
+}
+
+.react-tel-input .country-list .country .dial-code {
+  color: #666 !important;
+  font-weight: 500 !important;
+}
+
+/* Style search input */
+.react-tel-input .search-box {
+  padding: 0.5rem 1rem !important;
+  border: 1px solid #f97316 !important;
+  border-radius: 0.5rem !important;
+  margin: 0.5rem 0.5rem 0.5rem 0.5rem !important;
+  background: #fff !important;
+  display: none !important;
+}
+
+.react-tel-input .search-box input {
+  width: 100% !important;
+  padding: 0.25rem 0 !important;
+  font-size: 0.875rem !important;
+  border: none !important;
+  outline: none !important;
+  color: #333 !important;
+}
+
+/* Replace default search icon with better one */
+.react-tel-input .search-box .search-flag {
+  display: none !important; /* hide default icon */
+}
+.react-tel-input .country-list .search {
+  display: none !important;
+}
+.react-tel-input .form-control {
+  border: 1px solid #f97316 !important;
+}
+.react-tel-input .flag-dropdown {
+  border-radius: 3px !important;
+}
+.react-tel-input .flag-dropdown {
+  border: 0.5px solid #f97316 !important;
+}
+/* Add custom search icon */
+.react-tel-input .search-box::before {
+  display: none !important;
+  content: "🔍";
+  position: absolute;
+  left: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  font-size: 1rem;
+  pointer-events: none;
+}
+
+.react-tel-input .search-box input {
+  padding-left: 2rem !important; /* make space for icon */
+  display: none !important;
+}
+@font-face {
+  font-family: 'Monument Extended';
+  src: url('/fonts/MonumentExtended-Regular.woff2') format('woff2'),
+       url('/fonts/MonumentExtended-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Monument Extended';
+  src: url('../../public/fonts/MonumentExtended-Regular.otf') format('opentype'),
+       url('../../public/fonts/MonumentExtended-Ultrabold.otf') format('opentype');
+  font-weight: 800;
+  font-style: normal;
+}
+.product-home div h2{
+   font-family: 'Monument Extended', sans-serif !important;
+}
