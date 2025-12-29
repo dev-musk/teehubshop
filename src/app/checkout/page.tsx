@@ -6,19 +6,12 @@ import Link from "next/link";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// interface User {
-//   uid: string;
-//   phone: string;
-//   name?: string;
-//   address?: string;
-// }
-
 export default function CheckoutPage() {
   const { cartItems, clearCart } = useCart();
   const [coupon, setCoupon] = useState("");
   const [discount, setDiscount] = useState(0);
   const [couponMessage, setCouponMessage] = useState("");
-  // const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(false); // ✅ Add loading state
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -28,14 +21,11 @@ export default function CheckoutPage() {
     phone: "",
   });
 
-  // const wpApiBase = process.env.NEXT_PUBLIC_WP_API_URL || "https://teehubshop.com/wp-json/wp/v2";
-
   // Auto-fill user data if logged in
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       const userData = JSON.parse(storedUser);
-      // setUser(userData);
       setForm((prev) => ({
         ...prev,
         name: userData.name || "",
@@ -58,10 +48,11 @@ export default function CheckoutPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
 
     // WordPress/WooCommerce order data structure
     const orderData = {
-      payment_method: "cod", // Cash on Delivery
+      payment_method: "cod",
       payment_method_title: "Cash on Delivery",
       set_paid: false,
       billing: {
@@ -89,7 +80,6 @@ export default function CheckoutPage() {
       line_items: cartItems.map((item) => ({
         product_id: parseInt(item.id),
         quantity: item.quantity,
-        variation_id: 0, // Set if using variations
       })),
       shipping_lines: [
         {
@@ -101,35 +91,39 @@ export default function CheckoutPage() {
     };
 
     try {
-      // WordPress/WooCommerce orders endpoint
-      // Note: You'll need WooCommerce REST API credentials
-      const res = await fetch(`https://teehubshop.com/wp-json/wc/v3/orders`, {
+      // ✅ Use Next.js API route instead of direct WordPress call
+      const res = await fetch("/api/orders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          // Add WooCommerce API authentication here
-          // "Authorization": "Basic " + btoa("consumer_key:consumer_secret")
         },
         body: JSON.stringify(orderData),
       });
 
+      const data = await res.json();
+
       if (!res.ok) {
-        const error = await res.json();
-        console.error("Order creation failed:", error);
-        throw new Error("Failed to create order");
+        console.error("Order creation failed:", data);
+        throw new Error(data.error || "Failed to create order");
       }
 
-      const createdOrder = await res.json();
-      console.log("Order created:", createdOrder);
-
-      toast.success("Order placed successfully!");
+      console.log("✅ Order created:", data.id);
+      toast.success(`Order #${data.id} placed successfully!`);
       clearCart();
       
-      // Redirect to success page or order confirmation
-      // router.push(`/order-confirmation/${createdOrder.id}`);
+      // Redirect to orders page after 1.5 seconds
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 1500);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to place order. Please try again.");
+      toast.error(
+        error instanceof Error 
+          ? error.message 
+          : "Failed to place order. Please try again."
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -171,7 +165,8 @@ export default function CheckoutPage() {
               value={form.name}
               onChange={handleChange}
               required
-              className="w-full border rounded-lg px-3 py-2"
+              disabled={loading}
+              className="w-full border rounded-lg px-3 py-2 disabled:opacity-50 disabled:cursor-not-allowed"
             />
 
             <input
@@ -181,7 +176,8 @@ export default function CheckoutPage() {
               value={form.email}
               onChange={handleChange}
               required
-              className="w-full border rounded-lg px-3 py-2"
+              disabled={loading}
+              className="w-full border rounded-lg px-3 py-2 disabled:opacity-50 disabled:cursor-not-allowed"
             />
 
             <textarea
@@ -190,7 +186,8 @@ export default function CheckoutPage() {
               value={form.address}
               onChange={handleChange}
               required
-              className="w-full border rounded-lg px-3 py-2 h-24"
+              disabled={loading}
+              className="w-full border rounded-lg px-3 py-2 h-24 disabled:opacity-50 disabled:cursor-not-allowed"
             />
 
             <div className="grid grid-cols-2 gap-4">
@@ -200,7 +197,8 @@ export default function CheckoutPage() {
                 value={form.city}
                 onChange={handleChange}
                 required
-                className="w-full border rounded-lg px-3 py-2"
+                disabled={loading}
+                className="w-full border rounded-lg px-3 py-2 disabled:opacity-50 disabled:cursor-not-allowed"
               />
               <input
                 name="pincode"
@@ -208,7 +206,8 @@ export default function CheckoutPage() {
                 value={form.pincode}
                 onChange={handleChange}
                 required
-                className="w-full border rounded-lg px-3 py-2"
+                disabled={loading}
+                className="w-full border rounded-lg px-3 py-2 disabled:opacity-50 disabled:cursor-not-allowed"
               />
             </div>
 
@@ -218,14 +217,17 @@ export default function CheckoutPage() {
               value={form.phone}
               onChange={handleChange}
               required
-              className="w-full border rounded-lg px-3 py-2"
+              disabled={loading}
+              className="w-full border rounded-lg px-3 py-2 disabled:opacity-50 disabled:cursor-not-allowed"
             />
 
+            {/* ✅ Updated button with loading state */}
             <button
               type="submit"
-              className="w-full bg-orange-600 text-white py-2 rounded-lg hover:bg-orange-700 transition-colors"
+              disabled={loading}
+              className="w-full bg-orange-600 text-white py-2 rounded-lg hover:bg-orange-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Place Order
+              {loading ? "Placing Order..." : "Place Order"}
             </button>
           </form>
 
@@ -253,12 +255,14 @@ export default function CheckoutPage() {
                   placeholder="Enter coupon code"
                   value={coupon}
                   onChange={(e) => setCoupon(e.target.value)}
-                  className="flex-1 border rounded-lg px-3 py-2 text-sm"
+                  disabled={loading}
+                  className="flex-1 border rounded-lg px-3 py-2 text-sm disabled:opacity-50"
                 />
                 <button
                   type="button"
                   onClick={handleApplyCoupon}
-                  className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition"
+                  disabled={loading}
+                  className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition disabled:opacity-50"
                 >
                   Apply
                 </button>

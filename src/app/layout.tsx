@@ -20,7 +20,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <CartProvider>
-          <AuthListener /> {/* 👈 add here */}
+          <AuthListener /> 
           <LayoutClient>{children}</LayoutClient>
         </CartProvider>
         <ToastContainer position="top-center" autoClose={2000} />

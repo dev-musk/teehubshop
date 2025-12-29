@@ -39,9 +39,7 @@ export default function Header() {
     async function fetchCategories() {
       try {
         // Fetch from WordPress product categories endpoint
-        const res = await fetch(
-          "https://teehubshop.com/wp-json/wc/v3/products/categories?per_page=100&consumer_key=ck_d3c0b18ca7ac7fbf059265d229555187de554abf&consumer_secret=cs_f0353b549d425dce8fd3a7697fb2954e890b0e65"
-        );
+        const res = await fetch("/api/categories");
         
         if (!res.ok) {
           console.error("Failed to fetch categories:", res.status);

@@ -10,7 +10,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-// import { Navigation, Pagination } from "swiper/modules";
+import { Navigation, Pagination, FreeMode } from "swiper/modules";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -85,21 +85,60 @@ export default function QuickViewModal({
           </div>
 
           <div className="flex-1 overflow-y-auto p-4">
+            {/* ✅ FIXED: Scrollable image gallery with navigation */}
             {images.length > 0 && (
-              <Swiper spaceBetween={10} slidesPerView={2} className="mb-4">
-                {images.map((src, i) => (
-                  <SwiperSlide key={i}>
-                    <Image
-                      unoptimized
-                      src={src}
-                      alt={product.name}
-                      width={300}
-                      height={300}
-                      className="rounded-lg border border-gray-200 object-cover w-64 h-64"
-                    />
-                  </SwiperSlide>
-                ))}
-              </Swiper>
+              <div className="mb-4 relative">
+                <Swiper
+                  spaceBetween={10}
+                  slidesPerView={2}
+                  navigation={{
+                    nextEl: '.swiper-button-next-custom',
+                    prevEl: '.swiper-button-prev-custom',
+                  }}
+                  pagination={{
+                    clickable: true,
+                    dynamicBullets: true,
+                  }}
+                  freeMode={true}
+                  modules={[Navigation, FreeMode]}
+                  className="mb-4"
+                >
+                  {images.map((src, i) => (
+                    <SwiperSlide key={i}>
+                      <Image
+                        unoptimized
+                        src={src}
+                        alt={`${product.name} - Image ${i + 1}`}
+                        width={200}
+                        height={200}
+                        className="rounded-lg border border-gray-200 object-cover w-full h-60"
+                      />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+                
+                {/* Custom Navigation Arrows */}
+                {images.length > 2 && (
+                  <>
+                    <button
+                      className="swiper-button-prev-custom absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white rounded-full p-2 shadow-lg"
+                      aria-label="Previous"
+                    >
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M15 18l-6-6 6-6" />
+                      </svg>
+                    </button>
+                    <button
+                      className="swiper-button-next-custom absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white rounded-full p-2 shadow-lg"
+                      aria-label="Next"
+                    >
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M9 18l6-6-6-6" />
+                      </svg>
+                    </button>
+                  </>
+                )}
+              </div>
             )}
 
             <h2 className="text-xl font-semibold mb-2">{product.name}</h2>

@@ -3,8 +3,12 @@ import type { WooCommerceProduct, WooCommerceCategory, WooCommerceImage, WooComm
 
 const WC_API = "https://teehubshop.com/wp-json/wc/v3/products";
 
-const WC_KEY = process.env.NEXT_PUBLIC_WC_CONSUMER_KEY || "ck_d3c0b18ca7ac7fbf059265d229555187de554abf";
-const WC_SECRET = process.env.NEXT_PUBLIC_WC_CONSUMER_SECRET || "cs_f0353b549d425dce8fd3a7697fb2954e890b0e65";
+const WC_KEY = process.env.NEXT_PUBLIC_WC_CONSUMER_KEY!;
+const WC_SECRET = process.env.NEXT_PUBLIC_WC_CONSUMER_SECRET!;
+
+if (!WC_KEY || !WC_SECRET) {
+  throw new Error("❌ WooCommerce API keys not configured in .env.local");
+}
 
 export async function GET(req: Request) {
   try {
